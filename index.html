@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <title>轮播Demo</title>
+    <link rel="stylesheet" href="./index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="show">
+        <div class="shufling" id="shufling">
+            <img src="./images/1.jpg" alt="猫" width="300" height="300">
+            <img src="./images/2.jpg" alt="猫" width="300" height="300">
+            <img src="./images/3.jpg" alt="猫" width="300" height="300">
+            <img src="./images/4.jpg" alt="猫" width="300" height="300">
+        </div>
+    </div>
+
+    <div class="btnS">
+        <div id="b1"></div>
+        <div id="b2"></div>
+        <div id="b3"></div>
+        <div id="b4"></div>
+    </div>
+    <script>
+        
+        var allBtns = $('.btnS > div')
+        for (let i = 0; i < allBtns.length; i++) {
+            $(allBtns[i]).on('click', function (x) {
+                // console.log($(x.currentTarget).index());//这个方法可以得到数组中元素的当前位置
+                n=$(x.currentTarget).index()
+                activeButton(allBtns.eq(n))
+                var s = ($(x.currentTarget).index()) * -300;
+                $(shufling).css({
+                    transform: 'translateX(' + s + 'px)'
+                })
+            })
+        }
+        // //实现无限轮播
+        var n = 0;
+        var size = allBtns.length;
+        function activeButton($button) {
+            $button.addClass('green').siblings('.green').removeClass('green')
+        }
+        activeButton(allBtns.eq(n))
+        function setTimer() {
+            return setInterval(() => {
+                n = n + 1;
+                allBtns.eq(n % size).trigger('click').addClass('green').siblings('.green').removeClass('green')
+
+            }, 2000)
+        }
+        var timerId = setTimer();
+        //实现鼠标划上去轮播暂停
+        $('.show').on('mouseenter', function () {
+            window.clearInterval(timerId);
+        })
+        $('.show').on('mouseleave', function () {
+            timerId = setTimer();
+        })
+    </script>
+</body>
+
+</html>
